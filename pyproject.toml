@@ -14,12 +14,13 @@ fastapi = "0.115.12"
 pydantic = "2.11.5"
 pydantic-settings = "2.9.1"
 python-multipart = "0.0.20"
+email-validator = "2.2.0"
 bcrypt = "4.3.0"
 sendgrid = "6.12.3"
 psycopg-binary = "3.2.9"
 prisma = "0.15.0"
 harlequin = {version = "2.1.2", extras = ["postgres"]}
-piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.2" }
+piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.4" }
 
 [tool.poetry.scripts]
 fastroutes = "fastlet.cli:main"
