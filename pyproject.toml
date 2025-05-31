@@ -1,27 +1,30 @@
-[project]
+[tool.poetry]
 name = "fastlet"
 version = "0.1.0"
 description = ""
-authors = [{ name = "draew6" }]
-dependencies = [
-    "uvicorn[standard]==0.34.2",
-    "python-jose==3.5.0",
-    "fastapi==0.115.12",
-    "pydantic==2.11.5",
-    "pydantic-settings==2.9.1",
-    "python-multipart==0.0.20",
-    "bcrypt==4.3.0",
-    "sendgrid==6.12.3",
-    "psycopg-binary==3.2.9",
-    "git+https://github.com/draew6/piping_bag.git@v0.2.2",
-    "prisma==0.15.0",
-    "harlequin[postgres]==2.1.2"
-]
+authors = ["draew6"]
+readme = "README.md"
+packages = [{ include = "fastlet" }]
 requires-python = ">=3.13"
 
-[project.scripts]
+[tool.poetry.dependencies]
+python = ">=3.13"
+uvicorn = {extras = ["standard"], version = "0.34.2"}
+python-jose = "3.5.0"
+fastapi = "0.115.12"
+pydantic = "2.11.5"
+pydantic-settings = "2.9.1"
+python-multipart = "0.0.20"
+bcrypt = "4.3.0"
+sendgrid = "6.12.3"
+psycopg-binary = "3.2.9"
+prisma = "0.15.0"
+harlequin = {version = "2.1.2", extras = ["postgres"]}
+piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.2" }
+
+[tool.poetry.scripts]
 fastroutes = "fastlet.cli:main"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
