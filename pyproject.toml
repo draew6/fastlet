@@ -3,7 +3,6 @@ name = "fastlet"
 version = "0.1.0"
 description = ""
 authors = ["draew6"]
-readme = "README.md"
 packages = [{ include = "fastlet" }]
 requires-python = ">=3.13"
 
