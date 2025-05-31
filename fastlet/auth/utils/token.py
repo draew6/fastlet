@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Annotated
 from fastapi import Depends, HTTPException
 from fastlet.utils.settings import get_settings
@@ -29,7 +29,7 @@ def create_token() -> str:
 def create_access_token(user_id: int, role: str, name: str) -> str:
     return jwt.encode(
         {"id": user_id, "role": role, "name": name}
-        | {"exp": datetime.utcnow() + timedelta(minutes=15)},
+        | {"exp": datetime.now(UTC) + timedelta(minutes=15)},
         settings.app_secret,
         algorithm="HS256",
     )
