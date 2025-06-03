@@ -36,6 +36,7 @@ def prepare_test_environment(app: FastAPI, queries: Type[BaseQueries], get_db_fn
     app.dependency_overrides[get_db_fn] = get_test_db
     app.dependency_overrides[get_mail_sender] = get_mail_sender_mock
 
+    return get_test_db
 
 """
 def enable_foreign_keys():
