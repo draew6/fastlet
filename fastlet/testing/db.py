@@ -1,6 +1,14 @@
 import os
+from typing import Type
+
+import pytest
+from fastapi import FastAPI
+from piping_bag.interfaces import SQLiteDatabase
+from piping_bag.queries import BaseQueries
 from ..utils.db import create_sqlite_schema, run_scripts, push_to_db
 from pytest import fixture
+from ..testing.queries import TestQueries
+from ..queries.auth import get_db
 
 
 @fixture(scope="function", autouse=True)
@@ -16,6 +24,17 @@ def build_db():
 def delete_db():
     if os.path.exists("db/internals/test.db"):
         os.remove("db/internals/test.db")
+
+def prepare_test_environment(app: FastAPI, queries: Type[BaseQueries], get_db_fn: callable):
+    class TestQ(queries, TestQueries): ...
+
+    def get_test_db() -> TestQueries:
+        return TestQ(SQLiteDatabase("db/internals/test.db"))
+
+    os.environ["ENV"] = "TEST"
+    app.dependency_overrides[get_db] = get_test_db
+    app.dependency_overrides[get_db_fn] = get_test_db
+
 
 
 """
