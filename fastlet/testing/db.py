@@ -1,7 +1,6 @@
 import os
 from typing import Type
 
-import pytest
 from fastapi import FastAPI
 from piping_bag.interfaces import SQLiteDatabase
 from piping_bag.queries import BaseQueries
@@ -9,6 +8,7 @@ from ..utils.db import create_sqlite_schema, run_scripts, push_to_db
 from pytest import fixture
 from ..testing.queries import TestQueries
 from ..queries.auth import get_db
+from ..utils.mail import get_mail_sender, get_mail_sender_mock
 
 
 @fixture(scope="function", autouse=True)
@@ -34,7 +34,7 @@ def prepare_test_environment(app: FastAPI, queries: Type[BaseQueries], get_db_fn
     os.environ["ENV"] = "TEST"
     app.dependency_overrides[get_db] = get_test_db
     app.dependency_overrides[get_db_fn] = get_test_db
-
+    app.dependency_overrides[get_mail_sender] = get_mail_sender_mock
 
 
 """
