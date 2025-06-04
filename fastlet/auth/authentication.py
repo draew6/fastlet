@@ -2,6 +2,9 @@ from ..models.auth import UserAuth, DeviceInfo, Mail, LoginCredentials, RefreshT
 from fastapi import HTTPException
 from .utils.password import verify_password
 from ..deps.auth import AuthQueries
+from ..auth.utils.cookie import get_signer
+from ..deps.auth import RawAuthCookies
+from ..models.auth import AuthCookie
 
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
@@ -36,3 +39,13 @@ async def authenticate_user(
         return user
     else:
         return None
+
+
+def get_signed_auth_cookies(cookies: RawAuthCookies) -> AuthCookie:
+    signer = get_signer()
+    unsigned_refresh_token = signer.unsign(cookies.refresh_token)
+    unsigned_access_token = signer.unsign(cookies.access_token)
+    return AuthCookie(
+        access_token=unsigned_access_token.decode(),
+        refresh_token=unsigned_refresh_token.decode(),
+    )
