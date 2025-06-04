@@ -1,12 +1,9 @@
-from typing import Annotated
-
 from ..models.auth import UserAuth, DeviceInfo, Mail, LoginCredentials, RefreshTokenBody
 from fastapi import HTTPException
 from .utils.password import verify_password
-from ..deps.auth import AuthQueries
+from ..deps.auth import AuthQueries, RawAuthCookies
 from ..auth.utils.cookie import get_signer
 from ..models.auth import AuthCookie
-from fastapi import Cookie
 
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
@@ -43,7 +40,7 @@ async def authenticate_user(
         return None
 
 
-def get_signed_auth_cookies(cookies: Annotated[AuthCookie, Cookie()]) -> AuthCookie:
+def get_signed_auth_cookies(cookies: RawAuthCookies) -> AuthCookie:
     signer = get_signer()
     unsigned_refresh_token = signer.unsign(cookies.refresh_token)
     unsigned_access_token = signer.unsign(cookies.access_token)
