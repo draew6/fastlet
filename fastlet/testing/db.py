@@ -25,7 +25,10 @@ def delete_db():
     if os.path.exists("db/internals/test.db"):
         os.remove("db/internals/test.db")
 
-def prepare_test_environment(app: FastAPI, queries: Type[BaseQueries], get_db_fn: callable):
+
+def prepare_test_environment(
+    app: FastAPI, queries: Type[BaseQueries], get_db_fn: callable
+):
     class TestQ(queries, TestQueries): ...
 
     def get_test_db() -> TestQueries:
@@ -37,6 +40,7 @@ def prepare_test_environment(app: FastAPI, queries: Type[BaseQueries], get_db_fn
     app.dependency_overrides[get_mail_sender] = get_mail_sender_mock
 
     return get_test_db
+
 
 """
 def enable_foreign_keys():

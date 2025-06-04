@@ -4,6 +4,9 @@ from email_validator import validate_email, EmailNotValidError
 
 role = Literal["USER", "ADMIN", "TESTER", "SYSTEM"]
 
+class AuthCookie(BaseModel):
+    access_token: str
+    refresh_token: str
 
 class DeviceInfo(BaseModel):
     endpoint: str
