@@ -25,7 +25,7 @@ piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.4" 
 fastroutes = { git = "https://github.com/draew6/fastroutes.git" }
 
 [tool.poetry.scripts]
-fastroutes = "fastlet.cli:main"
+fastlet = "fastlet.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
