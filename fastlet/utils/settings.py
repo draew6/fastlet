@@ -38,6 +38,10 @@ class NotifSettings(ServiceWithDBSettings):
     vapid_mailto: str
 
 
+class BFFService(ServiceWithoutDBSettings):
+    cookie_secret: str
+
+
 @overload
 def get_settings(service_type: Literal["auth"]) -> AuthSettings: ...
 @overload
@@ -48,12 +52,13 @@ def get_settings(
 ) -> ServiceWithoutDBSettings: ...
 @overload
 def get_settings(service_type: Literal["service_with_db"]) -> ServiceWithDBSettings: ...
-
+@overload
+def get_settings(service_type: Literal["bff"]) -> BFFService: ...
 
 @lru_cache
 def get_settings(
-    service_type: Literal["auth", "notif", "service_without_db", "service_with_db"],
-) -> ServiceWithoutDBSettings | ServiceWithDBSettings | AuthSettings | NotifSettings:
+    service_type: Literal["auth", "notif", "service_without_db", "service_with_db", "bff"],
+) -> ServiceWithoutDBSettings | ServiceWithDBSettings | AuthSettings | NotifSettings | BFFService:
     if service_type == "auth":
         settings = AuthSettings
     elif service_type == "notif":
@@ -62,6 +67,8 @@ def get_settings(
         settings = ServiceWithoutDBSettings
     elif service_type == "service_with_db":
         settings = ServiceWithDBSettings
+    elif service_type == "bff":
+        settings = BFFService
     else:
         raise ValueError(f"Unknown service type: {service_type}")
     if os.environ.get("ENV") == "TEST":
