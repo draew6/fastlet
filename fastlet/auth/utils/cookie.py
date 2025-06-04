@@ -6,7 +6,7 @@ from ...utils.settings import get_settings
 
 
 def get_signer() -> Signer:
-    settings = get_settings("service_without_db")
+    settings = get_settings("bff")
     return Signer(settings.cookie_secret)
 
 
