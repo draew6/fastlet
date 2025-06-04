@@ -11,4 +11,4 @@ sendgrid==6.12.3
 psycopg-binary==3.2.9
 git+https://github.com/draew6/fastroutes.git
 email-validator==2.2.0
-itsdangerous==3.0.2
+itsdangerous==2.2.0
