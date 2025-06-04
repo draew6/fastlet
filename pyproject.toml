@@ -19,8 +19,11 @@ bcrypt = "4.3.0"
 sendgrid = "6.12.3"
 psycopg-binary = "3.2.9"
 prisma = "0.15.0"
+email-validator = "2.2.0"
+itsdangerous = "3.0.2"
 harlequin = {version = "2.1.2", extras = ["postgres"]}
 piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.4" }
+fastroutes = { git = "https://github.com/draew6/fastroutes.git" }
 
 [tool.poetry.scripts]
 fastroutes = "fastlet.cli:main"
