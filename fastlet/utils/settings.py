@@ -55,10 +55,19 @@ def get_settings(service_type: Literal["service_with_db"]) -> ServiceWithDBSetti
 @overload
 def get_settings(service_type: Literal["bff"]) -> BFFService: ...
 
+
 @lru_cache
 def get_settings(
-    service_type: Literal["auth", "notif", "service_without_db", "service_with_db", "bff"],
-) -> ServiceWithoutDBSettings | ServiceWithDBSettings | AuthSettings | NotifSettings | BFFService:
+    service_type: Literal[
+        "auth", "notif", "service_without_db", "service_with_db", "bff"
+    ],
+) -> (
+    ServiceWithoutDBSettings
+    | ServiceWithDBSettings
+    | AuthSettings
+    | NotifSettings
+    | BFFService
+):
     if service_type == "auth":
         settings = AuthSettings
     elif service_type == "notif":
