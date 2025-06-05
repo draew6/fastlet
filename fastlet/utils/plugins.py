@@ -11,3 +11,5 @@ def autoload(app: FastAPI, package_name: str):
         module = import_module(module_name)
         if hasattr(module, "router"):
             app.include_router(module.router)
+        if is_pkg:
+            autoload(app, module_name)
