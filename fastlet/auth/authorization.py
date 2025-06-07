@@ -11,7 +11,7 @@ class User(JWTPayload):
     requested_user_id: int
 
 
-async def authorize(
+async def authorize_user(
     payload: Annotated[JWTPayload | None, Depends(verify_jwt)], db: AuthQueries
 ) -> UserAuth:
     user_id = payload.id
@@ -19,6 +19,11 @@ async def authorize(
     if not user:
         raise HTTPException(status_code=401)
     return user
+
+async def authorize(payload: Annotated[JWTPayload, Depends(verify_jwt)]) -> JWTPayload:
+    if not payload:
+        raise HTTPException(status_code=401)
+    return payload
 
 
 async def authorize_admin(user: Annotated[UserAuth, Depends(authorize)]) -> UserAuth:
