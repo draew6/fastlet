@@ -1,11 +1,7 @@
 from fastapi import Response
 from datetime import datetime, timedelta, UTC
 from itsdangerous import Signer
-
-from .token import JWTPayload
-from ...deps.cookie import AuthCookies
 from ...utils.settings import get_settings
-from ..utils.token import verify_jwt as verify_jwt_token
 
 
 def get_signer() -> Signer:
@@ -28,9 +24,3 @@ def set_cookie(response: Response, name: str, value: str):
         samesite="none",
         httponly=True,
     )
-
-
-async def verify_jwt(
-    cookies: AuthCookies,
-) -> JWTPayload:
-    return await verify_jwt_token(cookies.access_token)
