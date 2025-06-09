@@ -1,9 +1,6 @@
 from datetime import datetime, UTC
-from typing import Annotated
-from fastapi import Depends, HTTPException
 from fastlet.utils.settings import get_settings
 from jose import jwt
-from jose.exceptions import ExpiredSignatureError
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer
 import secrets
@@ -33,13 +30,3 @@ def create_access_token(user_id: int, role: str, name: str) -> str:
         settings.app_secret,
         algorithm="HS256",
     )
-
-
-async def verify_jwt(
-    access_token: Annotated[str, Depends(access_token_scheme)],
-) -> JWTPayload:
-    try:
-        payload = jwt.decode(access_token, settings.app_secret, algorithms=["HS256"])
-    except ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    return JWTPayload(**payload)

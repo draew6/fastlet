@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException
 from typing import Annotated, TypeVar, Type
-from .utils.token import verify_jwt, JWTPayload
+from .utils.token import JWTPayload
 from ..models.auth import UserAuth
-from .authentication import get_user_by_id
+from .authentication import get_user_by_id, verify_jwt_token
 from ..models.payloads import UserIDsPayload
 from ..deps.auth import AuthQueries
 
@@ -12,7 +12,7 @@ class User(JWTPayload):
 
 
 async def authorize_user(
-    payload: Annotated[JWTPayload | None, Depends(verify_jwt)], db: AuthQueries
+    payload: Annotated[JWTPayload | None, Depends(verify_jwt_token)], db: AuthQueries
 ) -> UserAuth:
     user_id = payload.id
     user = await get_user_by_id(user_id, db)
@@ -21,7 +21,9 @@ async def authorize_user(
     return user
 
 
-async def authorize(payload: Annotated[JWTPayload, Depends(verify_jwt)]) -> JWTPayload:
+async def authorize(
+    payload: Annotated[JWTPayload, Depends(verify_jwt_token)],
+) -> JWTPayload:
     if not payload:
         raise HTTPException(status_code=401)
     return payload

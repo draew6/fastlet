@@ -1,11 +1,11 @@
 from .utils import (
-    verify_jwt as verify_jwt,
     verify_password as verify_password,
     create_token as create_token,
     create_access_token as create_access_token,
     authenticate_user_for_docs as authenticate_user_for_docs,
     hash_password as hash_password,
 )
+
 from .authorization import (
     only_self_allowed as only_self_allowed,
     authorize_admin as authorize_admin,
@@ -20,4 +20,7 @@ from .authentication import (
     get_user_by_mail as get_user_by_mail,
     get_user_by_refresh_token as get_user_by_refresh_token,
     authenticate_user as authenticate_user,
+    get_unsigned_auth_cookies as get_unsigned_auth_cookies,
+    verify_jwt_token as verify_jwt_token,
+    verify_jwt_cookie as verify_jwt_cookie,
 )

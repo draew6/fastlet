@@ -1,11 +1,14 @@
+from typing import Annotated
+from jose import jwt, ExpiredSignatureError
+from .utils.token import access_token_scheme, settings
 from ..models.auth import UserAuth, DeviceInfo, Mail, LoginCredentials, RefreshTokenBody
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 from .utils.password import verify_password
 from ..deps.auth import AuthQueries, RawAuthCookies
 from ..auth.utils.cookie import get_signer
 from ..models.auth import AuthCookie
-from .authorization import JWTPayload, verify_jwt as verify_jwt_token
-from ..deps.cookie import AuthCookies
+from .authorization import JWTPayload
+
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
     return await db.get_user_by_id(user_id)
@@ -50,8 +53,21 @@ def get_unsigned_auth_cookies(cookies: RawAuthCookies) -> AuthCookie:
         refresh_token=unsigned_refresh_token.decode(),
     )
 
+
+async def verify_jwt_token(
+    access_token: Annotated[str, Depends(access_token_scheme)],
+) -> JWTPayload:
+    try:
+        payload = jwt.decode(access_token, settings.app_secret, algorithms=["HS256"])
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    return JWTPayload(**payload)
+
+
 async def verify_jwt_cookie(
-    cookies: AuthCookies,
+    cookies: Annotated[AuthCookie, Depends(get_unsigned_auth_cookies)],
 ) -> JWTPayload:
     return await verify_jwt_token(cookies.access_token)
 
+
+User = Annotated[JWTPayload, Depends(verify_jwt_cookie)]
