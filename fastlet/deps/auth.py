@@ -5,9 +5,9 @@ from ..queries.auth import get_db, AuthQueries
 from fastapi import Depends
 from ..models.auth import AuthCookie
 from fastapi import Cookie
-from ..auth.utils.cookie import verify_jwt
+from ..auth.authentication import verify_jwt_cookie
 
 
 AuthQueries = Annotated[AuthQueries, Depends(get_db)]
 RawAuthCookies = Annotated[AuthCookie, Cookie()]
-User = Annotated[JWTPayload, Depends(verify_jwt)]
+User = Annotated[JWTPayload, Depends(verify_jwt_cookie)]
