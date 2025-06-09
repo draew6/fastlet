@@ -7,7 +7,7 @@ from .utils.password import verify_password
 from ..deps.auth import AuthQueries, RawAuthCookies
 from ..auth.utils.cookie import get_signer
 from ..models.auth import AuthCookie
-from .authorization import JWTPayload
+from .utils.token import JWTPayload
 
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
