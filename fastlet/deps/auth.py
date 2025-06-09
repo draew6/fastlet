@@ -1,13 +1,12 @@
 from typing import Annotated
 
-from ..auth.utils.token import JWTPayload
+
 from ..queries.auth import get_db, AuthQueries
 from fastapi import Depends
 from ..models.auth import AuthCookie
 from fastapi import Cookie
-from ..auth.authentication import verify_jwt_cookie
 
 
 AuthQueries = Annotated[AuthQueries, Depends(get_db)]
 RawAuthCookies = Annotated[AuthCookie, Cookie()]
-User = Annotated[JWTPayload, Depends(verify_jwt_cookie)]
+
