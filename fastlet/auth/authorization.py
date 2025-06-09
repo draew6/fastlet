@@ -20,6 +20,7 @@ async def authorize_user(
         raise HTTPException(status_code=401)
     return user
 
+
 async def authorize(payload: Annotated[JWTPayload, Depends(verify_jwt)]) -> JWTPayload:
     if not payload:
         raise HTTPException(status_code=401)
