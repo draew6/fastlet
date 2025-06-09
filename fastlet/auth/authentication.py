@@ -4,7 +4,8 @@ from .utils.password import verify_password
 from ..deps.auth import AuthQueries, RawAuthCookies
 from ..auth.utils.cookie import get_signer
 from ..models.auth import AuthCookie
-
+from .authorization import JWTPayload, verify_jwt as verify_jwt_token
+from ..deps.cookie import AuthCookies
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
     return await db.get_user_by_id(user_id)
@@ -48,3 +49,9 @@ def get_unsigned_auth_cookies(cookies: RawAuthCookies) -> AuthCookie:
         access_token=unsigned_access_token.decode(),
         refresh_token=unsigned_refresh_token.decode(),
     )
+
+async def verify_jwt_cookie(
+    cookies: AuthCookies,
+) -> JWTPayload:
+    return await verify_jwt_token(cookies.access_token)
+
