@@ -64,8 +64,10 @@ async def verify_jwt_token(
     return JWTPayload(**payload)
 
 
+AuthCookies = Annotated[AuthCookie, Depends(get_unsigned_auth_cookies)]
+
 async def verify_jwt_cookie(
-    cookies: Annotated[AuthCookie, Depends(get_unsigned_auth_cookies)],
+    cookies: AuthCookies,
 ) -> JWTPayload:
     return await verify_jwt_token(cookies.access_token)
 
