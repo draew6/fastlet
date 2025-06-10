@@ -30,3 +30,7 @@ def create_access_token(user_id: int, role: str, name: str) -> str:
         settings.app_secret,
         algorithm="HS256",
     )
+
+
+def create_system_access_token() -> str:
+    return create_access_token(0, "SYSTEM", settings.project_name)
