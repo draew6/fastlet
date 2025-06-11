@@ -66,7 +66,7 @@ def scripts(environment: DevStag):
                     sql_script = (
                         f"SET search_path TO {settings.db_schema};{file.read()}"
                     )
-                conn = psycopg.connect(dsn=get_db_prisma_url())
+                conn = psycopg.connect(get_db_prisma_url())
                 cursor = conn.cursor()
                 cursor.execute(sql_script)
                 conn.commit()
