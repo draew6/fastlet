@@ -23,7 +23,7 @@ class TestDevStag(Enum):
 @app.command()
 def ide(environment: DevStag):
     """Open Harlequin IDE"""
-    if environment == "stag":
+    if environment.value == "stag":
         settings = get_settings("service_with_db")
         command = [
             "harlequin",
@@ -50,13 +50,13 @@ def ide(environment: DevStag):
 @app.command()
 def push(environment: TestDevStag):
     """Push Prisma schema"""
-    push_to_db(environment)
+    push_to_db(environment.value)
 
 
 @app.command()
 def scripts(environment: DevStag):
     """Run SQL scripts on DB."""
-    if environment == "stag":
+    if environment.value == "stag":
         settings = get_settings("service_with_db")
 
         for filename in os.listdir("db/scripts"):
