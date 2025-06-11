@@ -1,19 +1,27 @@
 import subprocess
 import typer
-from typing import Literal
 
 from ..utils.db import push_to_db, run_scripts, get_db_prisma_url
 from ..utils.settings import get_settings
 
 import os
 import psycopg
-
+from enum import Enum
 
 app = typer.Typer()
 
 
+class DevStag(Enum):
+    DEV = "dev"
+    STAG = "stag"
+
+class TestDevStag(Enum):
+    TEST = "test"
+    DEV = "dev"
+    STAG = "stag"
+
 @app.command()
-def ide(environment: Literal["dev", "stag"]):
+def ide(environment: DevStag):
     """Open Harlequin IDE"""
     if environment == "stag":
         settings = get_settings("service_with_db")
@@ -40,13 +48,13 @@ def ide(environment: Literal["dev", "stag"]):
 
 
 @app.command()
-def push(environment: Literal["test", "dev", "stag"]):
+def push(environment: TestDevStag):
     """Push Prisma schema"""
     push_to_db(environment)
 
 
 @app.command()
-def scripts(environment: Literal["dev", "stag"]):
+def scripts(environment: DevStag):
     """Run SQL scripts on DB."""
     if environment == "stag":
         settings = get_settings("service_with_db")
