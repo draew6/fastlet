@@ -10,6 +10,7 @@ class ServiceWithoutDBSettings(BaseSettings):
     project_name: str = "Project"
     auth_service: str = "localhost:8000/login"
     env: Literal["TEST", "DEV", "STAG", "PROD"] = "TEST"
+    project_root_domain: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -30,7 +31,6 @@ class AuthSettings(ServiceWithDBSettings):
     sendgrid_from_mail: str
     pwa_enabled: bool = False
     registration_enabled: bool = False
-    project_root_domain: str
 
 
 class NotifSettings(ServiceWithDBSettings):
