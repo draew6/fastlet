@@ -24,6 +24,7 @@ class ServiceWithDBSettings(ServiceWithoutDBSettings):
     db_port: str = "5432"
     db_name: str = "postgres"
     db_schema: str
+    db_prisma_url: str = 'prismaurl'
 
 
 class AuthSettings(ServiceWithDBSettings):
