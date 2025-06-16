@@ -34,7 +34,7 @@ class AuthSettings(ServiceWithDBSettings):
     registration_enabled: bool = False
 
 
-class NotifSettings(ServiceWithDBSettings):
+class NotifSettings(ServiceWithoutDBSettings):
     vapid_key: str
     vapid_mailto: str
 
