@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 from typing import Literal, overload
 import os
+from logging import getLogger
 
 
 class ServiceWithoutDBSettings(BaseSettings):
@@ -13,6 +14,14 @@ class ServiceWithoutDBSettings(BaseSettings):
     project_root_domain: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    @classmethod
+    def test(cls):
+        return cls(
+            app_secret="test_secret",
+            app_url="http://localhost:8000",
+            project_root_domain="localhost"
+        )
 
 
 # TODO: PORT as int?
@@ -26,6 +35,17 @@ class ServiceWithDBSettings(ServiceWithoutDBSettings):
     db_schema: str
     db_prisma_url: str = 'prismaurl'
 
+    @classmethod
+    def test(cls):
+        base = super().test()
+        return cls(
+            **base.model_dump() | {
+            "db_password":"test_password",
+            "db_host":"localhost",
+            "db_schema":"public"
+            }
+        )
+
 
 class AuthSettings(ServiceWithDBSettings):
     sendgrid_api_key: str
@@ -33,14 +53,40 @@ class AuthSettings(ServiceWithDBSettings):
     pwa_enabled: bool = False
     registration_enabled: bool = False
 
+    @classmethod
+    def test(cls):
+        base = super().test()
+        return cls(
+            **base.model_dump(),
+            sendgrid_api_key="test_sendgrid_api_key",
+            sendgrid_from_mail="test@test.test"
+        )
+
 
 class NotifSettings(ServiceWithoutDBSettings):
     vapid_key: str
     vapid_mailto: str
 
+    @classmethod
+    def test(cls):
+        base = super().test()
+        return cls(
+            **base.model_dump(),
+            vapid_key="test_vapid_key",
+            vapid_mailto="test_valid@mail.to"
+        )
+
 
 class BFFService(ServiceWithoutDBSettings):
     cookie_secret: str
+
+    @classmethod
+    def test(cls):
+        base = super().test()
+        return cls(
+            **base.model_dump(),
+            cookie_secret="test_cookie_secret"
+        )
 
 
 @overload
@@ -83,8 +129,5 @@ def get_settings(
         raise ValueError(f"Unknown service type: {service_type}")
     if os.environ.get("ENV") == "TEST":
 
-        class TestSettings(settings):
-            model_config = SettingsConfigDict(env_file=".env.test", extra="ignore")
-
-        return TestSettings()
+        return settings.test()
     return settings()
