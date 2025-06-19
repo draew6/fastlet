@@ -37,13 +37,11 @@ class ServiceWithDBSettings(ServiceWithoutDBSettings):
 
     @classmethod
     def test(cls):
-        base = super().test()
         return cls(
-            **base.model_dump() | {
-            "db_password":"test_password",
-            "db_host":"localhost",
-            "db_schema":"public"
-            }
+            **ServiceWithoutDBSettings.test().model_dump(),
+            db_host="localhost",
+            db_password="test_password",
+            db_schema="public"
         )
 
 
@@ -55,9 +53,8 @@ class AuthSettings(ServiceWithDBSettings):
 
     @classmethod
     def test(cls):
-        base = super().test()
         return cls(
-            **base.model_dump(),
+            **ServiceWithDBSettings.test().model_dump(),
             sendgrid_api_key="test_sendgrid_api_key",
             sendgrid_from_mail="test@test.test"
         )
@@ -69,9 +66,8 @@ class NotifSettings(ServiceWithoutDBSettings):
 
     @classmethod
     def test(cls):
-        base = super().test()
         return cls(
-            **base.model_dump(),
+            **ServiceWithoutDBSettings.test().model_dump(),
             vapid_key="test_vapid_key",
             vapid_mailto="test_valid@mail.to"
         )
@@ -82,9 +78,8 @@ class BFFService(ServiceWithoutDBSettings):
 
     @classmethod
     def test(cls):
-        base = super().test()
         return cls(
-            **base.model_dump(),
+            **ServiceWithoutDBSettings.test().model_dump(),
             cookie_secret="test_cookie_secret"
         )
 
