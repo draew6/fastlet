@@ -1,0 +1,4 @@
+prisma==0.15.0
+harlequin[postgres]==2.1.2
+ruff==0.11.12
+pysqlite3

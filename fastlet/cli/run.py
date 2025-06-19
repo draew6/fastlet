@@ -93,19 +93,25 @@ def secret():
     except subprocess.CalledProcessError as e:
         print("Error running the command:", e)
 
-@app.command()
-def docker():
-    """export docker file from this module to CWD"""
-    """Export Dockerfile to current working directory."""
-    dockerfile_path = os.path.join(os.path.dirname(__file__), "Dockerfile")
-    if os.path.exists(dockerfile_path):
-        with open(dockerfile_path, "r") as file:
+def export_file(name: str, export_dir: str = "."):
+    """export file from this module to CWD"""
+    file_path = os.path.join(os.path.dirname(__file__),"files", name)
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
             content = file.read()
-        with open("Dockerfile", "w") as file:
+        with open(os.path.join(export_dir, name), "w") as file:
             file.write(content)
-        print("Dockerfile exported to current working directory.")
+        print(f"{name} exported to current working directory.")
     else:
-        print("Dockerfile not found in the module directory.")
+        print(f"{name} not found in the module directory.")
+
+@app.command()
+def start():
+    export_file("Dockerfile")
+    export_file("pytest.ini")
+    export_file("requirements-base.txt")
+    export_file("requirements-dev.txt")
+    export_file("ci.yml", ".github/workflows")
 
 def main():
     app()

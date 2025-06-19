@@ -9,7 +9,10 @@ COPY . /app
 
 # Install any needed dependencies specified in requirements.txt
 RUN apt-get update && apt-get install -y git
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-base.txt
+RUN if [ -f requirements.txt ]; then \
+        pip install --no-cache-dir -r requirements.txt; \
+    fi
 
 EXPOSE 8000
 
