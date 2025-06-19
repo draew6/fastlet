@@ -94,14 +94,24 @@ def secret():
         print("Error running the command:", e)
 
 def export_file(name: str, export_dir: str = "."):
-    """export file from this module to CWD"""
-    file_path = os.path.join(os.path.dirname(__file__),"files", name)
-    if os.path.exists(file_path):
-        with open(file_path, "r") as file:
+    """Export file from this module to a target directory and add to Git tracking."""
+    src = os.path.join(os.path.dirname(__file__), "files", name)
+    dest = os.path.join(export_dir, name)
+
+    if os.path.exists(src):
+        os.makedirs(export_dir, exist_ok=True)
+        with open(src, "r") as file:
             content = file.read()
-        with open(os.path.join(export_dir, name), "w") as file:
+        with open(dest, "w") as file:
             file.write(content)
-        print(f"{name} exported to current working directory.")
+        print(f"{name} exported to {export_dir}.")
+
+        # Try to add the exported file to Git tracking
+        try:
+            subprocess.run(["git", "add", dest], check=True)
+            print(f"{name} added to Git tracking.")
+        except subprocess.CalledProcessError:
+            print(f"Failed to add {name} to Git. Are you in a Git repo?")
     else:
         print(f"{name} not found in the module directory.")
 
@@ -112,6 +122,7 @@ def start():
     export_file("requirements-base.txt")
     export_file("requirements-dev.txt")
     export_file("ci.yml", ".github/workflows")
+    export_file("notes.txt")
 
 def main():
     app()

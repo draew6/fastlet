@@ -1,0 +1,22 @@
+
+autorizacne testy
+
+
+
+
+
+id,topay, prepad
+played=len(invitations) where isplaying, ispaid, starttime < now
+paid=sum(no_of_matches)
+prepaid=paid-played
+topay=-prepaid >= noOfMatchesToPaySettings
+(if no settings,to pay=false)
+
+
+
+ENV
+
+
+
+
+RUN COMMANDS
