@@ -11,7 +11,6 @@ class ServiceWithoutDBSettings(BaseSettings):
     project_name: str = "Project"
     auth_service: str = "localhost:8000/login"
     env: Literal["TEST", "DEV", "STAG", "PROD"] = "TEST"
-    project_root_domain: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -20,7 +19,6 @@ class ServiceWithoutDBSettings(BaseSettings):
         return cls(
             app_secret="test_secret",
             app_url="http://localhost:8000",
-            project_root_domain="localhost"
         )
 
 
@@ -50,13 +48,15 @@ class AuthSettings(ServiceWithDBSettings):
     sendgrid_from_mail: str
     pwa_enabled: bool = False
     registration_enabled: bool = False
+    project_root_domain: str
 
     @classmethod
     def test(cls):
         return cls(
             **ServiceWithDBSettings.test().model_dump(),
             sendgrid_api_key="test_sendgrid_api_key",
-            sendgrid_from_mail="test@test.test"
+            sendgrid_from_mail="test@test.test",
+            project_root_domain = "localhost"
         )
 
 
@@ -72,15 +72,16 @@ class NotifSettings(ServiceWithoutDBSettings):
             vapid_mailto="test_valid@mail.to"
         )
 
-
-class BFFService(ServiceWithoutDBSettings):
+class BFFServiceSettings(ServiceWithoutDBSettings):
     cookie_secret: str
+    project_root_domain: str
 
     @classmethod
     def test(cls):
         return cls(
             **ServiceWithoutDBSettings.test().model_dump(),
-            cookie_secret="test_cookie_secret"
+            cookie_secret="test_cookie_secret",
+            project_root_domain = "localhost",
         )
 
 
@@ -95,7 +96,7 @@ def get_settings(
 @overload
 def get_settings(service_type: Literal["service_with_db"]) -> ServiceWithDBSettings: ...
 @overload
-def get_settings(service_type: Literal["bff"]) -> BFFService: ...
+def get_settings(service_type: Literal["bff"]) -> BFFServiceSettings: ...
 
 
 @lru_cache
@@ -104,11 +105,11 @@ def get_settings(
         "auth", "notif", "service_without_db", "service_with_db", "bff"
     ],
 ) -> (
-    ServiceWithoutDBSettings
-    | ServiceWithDBSettings
-    | AuthSettings
-    | NotifSettings
-    | BFFService
+        ServiceWithoutDBSettings
+        | ServiceWithDBSettings
+        | AuthSettings
+        | NotifSettings
+        | BFFServiceSettings
 ):
     if service_type == "auth":
         settings = AuthSettings
@@ -119,7 +120,7 @@ def get_settings(
     elif service_type == "service_with_db":
         settings = ServiceWithDBSettings
     elif service_type == "bff":
-        settings = BFFService
+        settings = BFFServiceSettings
     else:
         raise ValueError(f"Unknown service type: {service_type}")
     if os.environ.get("ENV") == "TEST":
