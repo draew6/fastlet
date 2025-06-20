@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements-base.txt
 RUN if [ -f requirements.txt ]; then \
         pip install --no-cache-dir -r requirements.txt; \
     fi
+RUN opentelemetry-bootstrap -a install
 
 EXPOSE 8000
 
@@ -20,4 +21,4 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 
 # Command to run the FastAPI app using Uvicorn
-CMD ["fastapi", "run", "--port", "8000"]
+CMD ["opentelemetry-instrument", "fastapi", "run", "--port", "8000"]

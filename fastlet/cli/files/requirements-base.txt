@@ -10,3 +10,4 @@ git+https://github.com/draew6/piping_bag.git@v0.2.4
 psycopg-binary==3.2.9
 git+https://github.com/draew6/fastroutes.git
 git+https://github.com/draew6/fastlet.git
+hyperdx-opentelemetry
