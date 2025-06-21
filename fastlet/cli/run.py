@@ -122,7 +122,6 @@ def start():
     export_file("requirements-base.txt")
     export_file("requirements-dev.txt")
     export_file("ci.yml", ".github/workflows")
-    export_file("notes.txt")
 
 def main():
     app()
