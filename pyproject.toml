@@ -8,10 +8,9 @@ requires-python = ">=3.13"
 
 [tool.poetry.dependencies]
 python = ">=3.13"
-uvicorn = {extras = ["standard"], version = "0.34.2"}
 python-jose = "3.5.0"
-fastapi = "0.115.12"
-pydantic = "2.11.5"
+fastapi = {extras = ["standard"], version = "0.115.13"}
+pydantic = "2.11.7"
 pydantic-settings = "2.9.1"
 python-multipart = "0.0.20"
 email-validator = "2.2.0"
@@ -21,7 +20,7 @@ psycopg-binary = "3.2.9"
 prisma = "0.15.0"
 itsdangerous = "2.2.0"
 harlequin = {version = "2.1.2", extras = ["postgres"]}
-piping-bag = { git = "https://github.com/draew6/piping_bag.git", tag = "v0.2.4" }
+piping-bag = { git = "https://github.com/draew6/piping_bag.git" }
 fastroutes = { git = "https://github.com/draew6/fastroutes.git" }
 
 [tool.poetry.scripts]
