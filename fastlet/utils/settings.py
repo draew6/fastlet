@@ -124,6 +124,6 @@ def get_settings(
     else:
         raise ValueError(f"Unknown service type: {service_type}")
     if os.environ.get("ENV") == "TEST":
-
+        settings.model_config["env_file"] = None
         return settings.test()
     return settings()
