@@ -29,7 +29,7 @@ def allow_cors(app: FastAPI):
         CORSMiddleware,
         allow_origins=["http://localhost:8001"],
         allow_credentials=True,
-        allow_origin_regex=rf"^https?://(?:[a-z0-9-]+\.)*{re.escape(settings.root_domain)}(?::\d+)?$",
+        allow_origin_regex=rf"^https?://(?:[a-z0-9-]+\.)*{re.escape(settings.project_root_domain)}(?::\d+)?$",
         allow_methods=["*"],
         allow_headers=["*"],
     )
