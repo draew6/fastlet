@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastlet"
-version = "0.1.9"
+version = "0.1.10"
 description = ""
 authors = ["draew6"]
 packages = [{ include = "fastlet" }]
