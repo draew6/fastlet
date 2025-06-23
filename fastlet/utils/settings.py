@@ -57,7 +57,8 @@ class AuthSettings(ServiceWithDBSettings):
             sendgrid_api_key="test_sendgrid_api_key",
             sendgrid_from_mail="test@test.test",
             project_root_domain = "localhost",
-            registration_enabled=True
+            registration_enabled=True,
+            pwa_enabled=True
         )
 
 
