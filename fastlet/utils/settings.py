@@ -77,6 +77,10 @@ class NotifSettings(ServiceWithoutDBSettings):
 class BFFServiceSettings(ServiceWithoutDBSettings):
     cookie_secret: str
     project_root_domain: str
+    activity_redis_host: str | None = None
+    activity_redis_port: int | None = None
+    activity_redis_username: str | None = None
+    activity_redis_password: str | None = None
 
     @classmethod
     def test(cls):
