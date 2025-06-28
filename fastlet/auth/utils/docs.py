@@ -1,5 +1,5 @@
 from fastapi.security import OAuth2PasswordRequestForm
-from fastlet.models.auth import UserAuth, LoginCredentials
+from ...models.auth import UserAuth, LoginCredentials
 from fastapi import Depends
 from typing import Annotated
 from ..authentication import authenticate_user

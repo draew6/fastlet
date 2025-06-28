@@ -1,4 +1,6 @@
-from fastlet.auth.authentication import AuthCookies
+from ..auth.authentication import AuthCookies
+from ..auth.utils.token import create_system_access_token
+
 
 class Client:
 
@@ -23,4 +25,11 @@ class Client:
         client = Client()
         for cl in client._iter_clients():
             cl.set_access_token(cookies.access_token)
+        return client
+
+    @staticmethod
+    def get_system_client():
+        client = Client()
+        for cl in client._iter_clients():
+            cl.set_access_token(create_system_access_token())
         return client

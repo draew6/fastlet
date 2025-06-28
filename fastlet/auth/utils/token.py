@@ -1,5 +1,5 @@
 from datetime import datetime, UTC
-from fastlet.utils.settings import get_settings
+from ...utils.settings import get_settings
 from jose import jwt
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer
