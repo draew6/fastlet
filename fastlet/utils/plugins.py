@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from importlib import import_module
 import pkgutil
@@ -9,7 +9,7 @@ from pydantic import ValidationError
 from ..utils.settings import get_settings
 
 
-def autoload(app: FastAPI, package_name: str):
+def autoload(app: FastAPI | APIRouter, package_name: str):
     package = import_module(package_name)
     for loader, module_name, is_pkg in pkgutil.iter_modules(
         package.__path__, package_name + "."
