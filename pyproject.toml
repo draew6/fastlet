@@ -19,6 +19,7 @@ sendgrid = "6.12.3"
 psycopg-binary = "3.2.9"
 prisma = "0.15.0"
 itsdangerous = "2.2.0"
+redis= "6.2.0"
 harlequin = {version = "2.1.2", extras = ["postgres"]}
 piping-bag = { git = "https://github.com/draew6/piping_bag.git" }
 fastroutes = { git = "https://github.com/draew6/fastroutes.git" }
