@@ -20,16 +20,16 @@ class Client:
             ):
                 yield attr
 
-    @staticmethod
-    def get_client(cookies: AuthCookies):
-        client = Client()
+    @classmethod
+    def get_client(cls, cookies: AuthCookies):
+        client = cls()
         for cl in client._iter_clients():
             cl.set_access_token(cookies.access_token)
         return client
 
-    @staticmethod
-    def get_system_client():
-        client = Client()
+    @classmethod
+    def get_system_client(cls):
+        client = cls()
         for cl in client._iter_clients():
             cl.set_access_token(create_system_access_token())
         return client
