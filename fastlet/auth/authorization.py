@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException
 from typing import Annotated, TypeVar, Type
 from .utils.token import JWTPayload
 from ..models.auth import UserAuth
-from .authentication import get_user_by_id, verify_jwt_token
+from .authentication import get_user_by_id, verify_jwt_token, verify_jwt_cookie
 from ..models.payloads import UserIDsPayload
 from ..deps.auth import AuthQueries
 
@@ -28,6 +28,10 @@ async def authorize(
         raise HTTPException(status_code=401)
     return payload
 
+async def authorize_bff(
+    payload: Annotated[JWTPayload, Depends(verify_jwt_cookie)],
+) -> JWTPayload:
+    return await authorize(payload)
 
 async def authorize_admin(user: Annotated[UserAuth, Depends(authorize)]) -> UserAuth:
     if user and user.role == "ADMIN":
