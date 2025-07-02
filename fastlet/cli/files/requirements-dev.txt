@@ -2,3 +2,4 @@ pysqlite3
 prisma
 harlequin[postgres]
 ruff
+pyright
