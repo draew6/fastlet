@@ -8,6 +8,7 @@ from ..deps.auth import AuthQueries, RawAuthCookies
 from ..auth.utils.cookie import get_signer
 from ..models.auth import AuthCookie
 from .utils.token import JWTPayload
+from itsdangerous import BadSignature
 
 
 async def get_user_by_id(user_id: int, db: AuthQueries) -> UserAuth | None:
@@ -44,10 +45,13 @@ async def authenticate_user(
         return None
 
 
-def get_unsigned_auth_cookies(cookies: RawAuthCookies) -> AuthCookie:
+def get_unsigned_auth_cookies(cookies: RawAuthCookies) -> AuthCookie | None:
     signer = get_signer()
-    unsigned_refresh_token = signer.unsign(cookies.refresh_token)
-    unsigned_access_token = signer.unsign(cookies.access_token)
+    try:
+        unsigned_refresh_token = signer.unsign(cookies.refresh_token)
+        unsigned_access_token = signer.unsign(cookies.access_token)
+    except BadSignature:
+        return None
     return AuthCookie(
         access_token=unsigned_access_token.decode(),
         refresh_token=unsigned_refresh_token.decode(),
@@ -64,11 +68,13 @@ async def verify_jwt_token(
     return JWTPayload(**payload)
 
 
-AuthCookies = Annotated[AuthCookie, Depends(get_unsigned_auth_cookies)]
+AuthCookies = Annotated[AuthCookie | None, Depends(get_unsigned_auth_cookies)]
 
 async def verify_jwt_cookie(
     cookies: AuthCookies,
 ) -> JWTPayload:
+    if not cookies:
+        raise HTTPException(status_code=400, detail="Invalid cookie sig")
     return await verify_jwt_token(cookies.access_token)
 
 
