@@ -23,8 +23,9 @@ class Client:
     @classmethod
     def get_client(cls, cookies: AuthCookies):
         client = cls()
-        for cl in client._iter_clients():
-            cl.set_access_token(cookies.access_token)
+        if cookies:
+            for cl in client._iter_clients():
+                cl.set_access_token(cookies.access_token)
         return client
 
     @classmethod
