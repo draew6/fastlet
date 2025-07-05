@@ -46,6 +46,8 @@ async def authenticate_user(
 
 
 def get_unsigned_auth_cookies(cookies: RawAuthCookies) -> AuthCookie | None:
+    if not cookies:
+        return None
     signer = get_signer()
     try:
         unsigned_refresh_token = signer.unsign(cookies.refresh_token)

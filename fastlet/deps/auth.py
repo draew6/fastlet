@@ -18,4 +18,4 @@ def NewCookie[T: BaseModel](model: type[T]):
 
 
 AuthQueries = Annotated[AuthQueries, Depends(get_db)]
-RawAuthCookies = Annotated[AuthCookie, Depends(NewCookie(AuthCookie))]
+RawAuthCookies = Annotated[AuthCookie | None, Depends(NewCookie(AuthCookie))]
