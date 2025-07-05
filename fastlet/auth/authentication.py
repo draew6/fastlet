@@ -76,7 +76,7 @@ async def verify_jwt_cookie(
     cookies: AuthCookies,
 ) -> JWTPayload:
     if not cookies:
-        raise HTTPException(status_code=400, detail="Invalid cookie sig")
+        raise HTTPException(status_code=401, detail="Invalid cookie sig")
     return await verify_jwt_token(cookies.access_token)
 
 
