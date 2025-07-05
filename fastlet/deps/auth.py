@@ -6,12 +6,13 @@ from pydantic import BaseModel, ValidationError
 
 
 def NewCookie[T: BaseModel](model: type[T]):
-    def dependency(request: Request) -> T:
+    def dependency(request: Request) -> T | None:
         try:
             data = {field: request.cookies.get(field) for field in model.model_fields}
             return model(**data)
         except ValidationError as e:
-            raise HTTPException(status_code=400, detail=e.errors())
+            print(e.errors())
+            return None
     return dependency
 
 
