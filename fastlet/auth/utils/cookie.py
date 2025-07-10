@@ -19,7 +19,9 @@ def set_cookie(response: Response, name: str, value: str):
     response.set_cookie(
         name,
         signed_value,
-        expires=datetime.now(UTC) + timedelta(days=40),
+        max_age=60*60*24*40,
+        expires=60*60*24*40,
+        # expires=datetime.now(UTC) + timedelta(days=40),
         secure=True,
         samesite="none",
         httponly=True,
