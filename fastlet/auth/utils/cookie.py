@@ -15,6 +15,7 @@ def set_cookie(response: Response, name: str, value: str):
     """
     signer = get_signer()
     signed_value = signer.sign(value.encode()).decode()
+    settings = get_settings("bff")
 
     response.set_cookie(
         name,
@@ -25,4 +26,5 @@ def set_cookie(response: Response, name: str, value: str):
         secure=True,
         samesite="none",
         httponly=True,
+        domain=settings.project_root_domain
     )
