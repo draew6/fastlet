@@ -62,9 +62,9 @@ def only_self_allowed(model_cls: Type[T]):
     async def only_self_allowed_check(
         user: Annotated[JWTPayload, Depends(authorize)], body: model_cls
     ) -> model_cls:
-        if len(body.user_ids) > 1 and user.role != "ADMIN":
+        if len(body.user_ids) > 1 and user.role not in ["ADMIN", "SYSTEM"]:
             raise HTTPException(status_code=403)
-        if user.role != "ADMIN" and [user.id] != body.user_ids:
+        if user.role not in ["ADMIN", "SYSTEM"] and [user.id] != body.user_ids:
             raise HTTPException(status_code=403)
         return body
 
