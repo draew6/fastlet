@@ -1,5 +1,5 @@
 pysqlite3
-prisma
+prisma==0.15.0
 harlequin[postgres]
 ruff
 pyright
