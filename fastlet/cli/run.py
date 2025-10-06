@@ -105,7 +105,7 @@ def export_file(name: str, export_dir: str = ".", src_dir: str = None, mode: Lit
         os.makedirs(export_dir, exist_ok=True)
         with open(src, "r") as file:
             content = file.read()
-        with open(dest, "w") as file:
+        with open(dest, mode) as file:
             file.write(content)
         print(f"{name} exported to {export_dir}.")
 
