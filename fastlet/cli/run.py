@@ -93,9 +93,10 @@ def secret():
     except subprocess.CalledProcessError as e:
         print("Error running the command:", e)
 
-def export_file(name: str, export_dir: str = "."):
+def export_file(name: str, export_dir: str = ".", src_dir: str = None, mode: Literal["w", "a"] = "w"):
     """Export file from this module to a target directory and add to Git tracking."""
-    src = os.path.join(os.path.dirname(__file__), "files", name)
+    src_path = src_dir if src_dir else __file__
+    src = os.path.join(os.path.dirname(src_path), "files", name)
     dest = os.path.join(export_dir, name)
 
     if os.path.exists(src):
