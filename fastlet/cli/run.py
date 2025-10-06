@@ -1,4 +1,6 @@
 import subprocess
+from typing import Literal
+
 import typer
 
 from ..utils.db import push_to_db, run_scripts, get_db_prisma_url
