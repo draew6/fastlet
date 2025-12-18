@@ -34,7 +34,7 @@ def create_sqlite_schema(
 
     content = content.replace("postgresql", "sqlite")
     content = content.replace('env("DB_PRISMA_URL")', f'"file:{db_path}"')
-    content = content.replace("@db.Timestamptz(6)", "")
+    content = content.replace("@db.Timestamp(6)", "")
 
     os.makedirs("db/internals", exist_ok=True)
     with open(output_file_path, "w") as output_file:
