@@ -79,5 +79,17 @@ async def verify_jwt_cookie(
         raise HTTPException(status_code=401, detail="Invalid cookie sig")
     return await verify_jwt_token(cookies.access_token)
 
+async def optional_verify_jwt_cookie(
+    cookies: AuthCookies,
+) -> JWTPayload | None:
+    """Returns user payload if valid cookies exist, None otherwise."""
+    if not cookies:
+        return None
+    try:
+        return await verify_jwt_token(cookies.access_token)
+    except HTTPException:
+        return None
+
+OptionalUser = Annotated[JWTPayload | None, Depends(optional_verify_jwt_cookie)]
 
 User = Annotated[JWTPayload, Depends(verify_jwt_cookie)]
