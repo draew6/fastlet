@@ -7,6 +7,8 @@ from crotal import (
     SystemOrSelf,
     User,
 )
+from crotal.authentication import VerifiedAuthTokens, set_cookie
+from crotal.config import Settings, get_settings
 from crotal.models import AuthTokens, UserInfo
 from crotal.testing import authenticated_client
 from crotal.tokens import (
@@ -21,12 +23,16 @@ __all__ = [
     "AuthTokens",
     "MustBeSelf",
     "OptionalUser",
+    "Settings",
     "System",
     "SystemOrSelf",
     "User",
     "UserInfo",
+    "VerifiedAuthTokens",
     "authenticated_client",
     "create_access_token",
     "create_system_access_token",
     "create_token",
+    "get_settings",
+    "set_cookie",
 ]

@@ -36,8 +36,10 @@ def autoload(app: FastAPI, package_name: str) -> None:
 _MODULES = {
     "auth": {
         "Admin", "AdminOrSelf", "AuthTokens", "MustBeSelf", "OptionalUser",
-        "System", "SystemOrSelf", "User", "UserInfo", "authenticated_client",
-        "create_access_token", "create_system_access_token", "create_token",
+        "Settings", "System", "SystemOrSelf", "User", "UserInfo",
+        "VerifiedAuthTokens", "authenticated_client", "create_access_token",
+        "create_system_access_token", "create_token", "get_settings",
+        "set_cookie",
     },
     "client": {
         "BaseClient", "service", "create_client", "create_system_client",
