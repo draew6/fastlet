@@ -1,6 +1,0 @@
-pytest
-pytest-env
-hyperdx-opentelemetry
-git+https://github.com/draew6/fastroutes.git
-git+https://github.com/draew6/fastlet.git
-git+https://github.com/draew6/piping_bag.git

@@ -1,5 +1,0 @@
-pysqlite3
-prisma==0.15.0
-harlequin[postgres]
-ruff
-pyright
