@@ -2,9 +2,33 @@ import importlib
 import pkgutil
 import re
 from importlib import import_module
+from typing import TYPE_CHECKING
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+if TYPE_CHECKING:
+    from fastlet.auth import (
+        Admin,
+        AdminOrSelf,
+        AuthTokens,
+        MustBeSelf,
+        OptionalUser,
+        Settings,
+        System,
+        SystemOrSelf,
+        User,
+        UserInfo,
+        VerifiedAuthTokens,
+        authenticated_client,
+        create_access_token,
+        create_system_access_token,
+        create_token,
+        get_settings,
+        set_cookie,
+    )
+    from fastlet.client import BaseClient, create_client, create_system_client, service
+    from fastlet.db import close_pool, create_queries_dependency, get_pool, init_pool, setup
 
 
 def allow_cors(app: FastAPI) -> None:
