@@ -5,7 +5,7 @@ from collections.abc import AsyncIterator
 from typing import Annotated, get_type_hints
 
 import httpx
-from fastapi import Depends, Request
+from fastapi import Depends, HTTPException, Request
 
 
 def service[T](client_cls: type[T], base_url: str, *, timeout: float | None = 30.0) -> T:
@@ -107,6 +107,10 @@ def create_client[T: BaseClient](client_cls: type[T]) -> type[T]:
             client.set_access_token(token)
         try:
             yield client
+        except Exception as exc:
+            if status := getattr(exc, "status_code", None):
+                raise HTTPException(status_code=status, detail=str(exc)) from exc
+            raise
         finally:
             await client.close()
 
@@ -132,6 +136,10 @@ def create_system_client[T: BaseClient](client_cls: type[T]) -> type[T]:
         client.set_access_token(create_system_access_token())
         try:
             yield client
+        except Exception as exc:
+            if status := getattr(exc, "status_code", None):
+                raise HTTPException(status_code=status, detail=str(exc)) from exc
+            raise
         finally:
             await client.close()
 
