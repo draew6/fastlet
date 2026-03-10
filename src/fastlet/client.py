@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator
 from typing import Annotated, get_type_hints
 
 import httpx
+from crotal.authentication import VerifiedAuthTokens
 from fastapi import Depends, HTTPException, Request
 
 
@@ -82,6 +83,15 @@ class BaseClient:
         await self.close()
 
 
+def _reraise_as_http(exc: Exception) -> None:
+    """Re-raise a service client exception as an HTTPException."""
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    if isinstance(status, int):
+        detail = getattr(exc, "message", None) or str(exc)
+        raise HTTPException(status_code=status, detail=detail) from exc
+    raise
+
+
 def create_client[T: BaseClient](client_cls: type[T]) -> type[T]:
     """Create a FastAPI dependency that forwards the user's Bearer token.
 
@@ -99,18 +109,20 @@ def create_client[T: BaseClient](client_cls: type[T]) -> type[T]:
             return await client.users.list_users()
     """
 
-    async def _dependency(request: Request) -> AsyncIterator[T]:
+    async def _dependency(
+        request: Request, cookies: VerifiedAuthTokens
+    ) -> AsyncIterator[T]:
         client = client_cls()
         auth = request.headers.get("authorization", "")
         token = auth.removeprefix("Bearer ").strip() if auth else None
+        if not token and cookies:
+            token = cookies.access_token
         if token:
             client.set_access_token(token)
         try:
             yield client
         except Exception as exc:
-            if status := getattr(exc, "status_code", None):
-                raise HTTPException(status_code=status, detail=str(exc)) from exc
-            raise
+            _reraise_as_http(exc)
         finally:
             await client.close()
 
@@ -137,9 +149,7 @@ def create_system_client[T: BaseClient](client_cls: type[T]) -> type[T]:
         try:
             yield client
         except Exception as exc:
-            if status := getattr(exc, "status_code", None):
-                raise HTTPException(status_code=status, detail=str(exc)) from exc
-            raise
+            _reraise_as_http(exc)
         finally:
             await client.close()
 
